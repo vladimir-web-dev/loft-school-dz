@@ -77,12 +77,12 @@ function returnCounter(number = 0) {
  Пример:
    returnArgumentsArray(1, 2, 3) вернет [1, 2, 3]
  */
-function returnArgumentsArray(...args) {
+function returnArgumentsArray() {
 	/*var argsArray = [];	
 	argsArray = Array.from(arguments);
   return argsArray;*/
 
-	return args;
+	return [...arguments];
 }
 
 /*
