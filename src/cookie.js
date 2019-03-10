@@ -74,6 +74,7 @@ function createRowNode (data) {
   deleteButton.textContent = 'Удалить';
 
   deleteButton.addEventListener('click', () => {
+    console.log(data.name)
     document.cookie = `${data.name}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; Path=/`;
     
     updatedCookies = getCookiesArray();
@@ -91,14 +92,19 @@ function createRowNode (data) {
 
 function getCookiesArray () {
   const cookiesString = document.cookie;
-  const cookiesStrArray = cookiesString.split('; ');
-  const cookiesObjArray = cookiesStrArray.map((cookie) => {
+
+  if(cookiesString !== '') {
+    const cookiesStrArray = cookiesString.split('; ');
+    const cookiesObjArray = cookiesStrArray.map((cookie) => {
     const [name, value] = cookie.split('=');
 
-    return { name, value };
-  });
+      return { name, value };
+    });
 
-  return cookiesObjArray;
+    return cookiesObjArray;
+  }
+
+  return [];
 }
 
 filterNameInput.addEventListener('keyup', function(e) {
@@ -106,14 +112,14 @@ filterNameInput.addEventListener('keyup', function(e) {
   const cookiesArray = getCookiesArray();
   let filteredCookiesArray = [];
 
-  if(entry !== '') {
-    filteredCookiesArray = cookiesArray.filter(coockie => {
-      const cookieName = coockie.name.toLowerCase();
-      const cookieValue = coockie.value.toLowerCase();
+  //if(entry !== '') {
+    filteredCookiesArray = cookiesArray.filter(cookie => {
+      const cookieName = cookie.name.toLowerCase();
+      const cookieValue = cookie.value.toLowerCase();
   
-      return cookieName.includes(filter) || cookieValue.includes(filter); 
+      return cookieName.includes(entry) || cookieValue.includes(entry); 
     });
-  }
+  //}
 
   populateCookiesTable(filteredCookiesArray);
 });
@@ -121,11 +127,13 @@ filterNameInput.addEventListener('keyup', function(e) {
 
 addButton.addEventListener('click', () => {
     // здесь можно обработать нажатие на кнопку "добавить cookie"
-    const cookieName = addNameInput.value;
-    const cookieValue = addValueInput.value;
     let updatedCookies;
 
-    document.coockie = `${cookieName}=${cookieValue}`;
+    
+    document.cookie = `${addNameInput.value}=${addValueInput.value}`;
+
+    addNameInput.value = '';
+    addValueInput.value = '';
 
     updatedCookies = getCookiesArray();
     populateCookiesTable(updatedCookies);
